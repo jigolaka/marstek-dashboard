@@ -36,5 +36,5 @@ if __name__ in {"__main__", "__mp_main__"}:
         STORE.get_bool_setting("always_on_top", False) and not fullscreen)
     app.native.window_args["resizable"] = STORE.get_bool_setting("allow_resize", True)
     app.native.settings["DRAG_REGION_SELECTOR"] = ".page-content.compact .view-box"
-    ui.run(host="0.0.0.0", native=True, window_size=(width, height), fullscreen=fullscreen, reload=False, title="Marstek Dashboard",
+    ui.run(host="127.0.0.1", native=True, window_size=(width, height), fullscreen=fullscreen, reload=False, title="Marstek Dashboard",
             favicon=Path(__file__).parent / "src" / "static" / ICON_NAME, reconnect_timeout=0)
