@@ -1,0 +1,39 @@
+name: Build Desktop Installers
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Linux runtime libraries
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0 libxkbcommon0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0
+      - name: Install Windows installer compiler
+        if: runner.os == 'Windows'
+        run: choco install innosetup --yes --no-progress
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt -r requirements-build.txt
+      - name: Run tests
+        run: python -m unittest discover tests
+      - name: Build installer
+        run: python packaging/build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Marstek-Dashboard-${{ runner.os }}-${{ runner.arch }}
+          if-no-files-found: error
+          path: |
+            dist/installer/*.exe
+            dist/*.dmg
+            dist/*.deb
