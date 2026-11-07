@@ -19,6 +19,14 @@ Discovery uses the Marstek Open API UDP broadcast directly. Keenetic DHCP lease 
 
 The API's UDP port defaults to `30000`; set a different value in the scan view if the device has a custom port. The app does not issue device configuration or control commands.
 
+## Branching
+
+- `main` is the development branch and contains changes intended for the next release.
+- `stable` tracks the latest deployed release. It currently starts at tag `v0.2.4`.
+- `feature/<short-name>` and `bug/<short-name>` branches start from `main` and merge back through a pull request.
+- Urgent production fixes use `hotfix/<short-name>` from `stable`; after verification, merge the fix into both `stable` and `main`.
+- To release, test `main`, merge it into `stable`, update the version, and create an annotated `vX.Y.Z` tag on `stable`.
+
 ## Build and install on macOS
 
 Build on the Mac that will run the app; PyInstaller does not cross-compile between operating systems. Install Python 3.12 and the Xcode command line tools first. Copy or clone the project to the Mac without copying the Windows `venv`, `build`, or `dist` folders, then run:
